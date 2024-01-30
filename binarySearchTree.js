@@ -79,6 +79,7 @@ function Tree(array) {
 
     const sortedArray = mergeSort(array);
     const cleanArray = removeDuplicates(sortedArray);
+    const root = buildTree(cleanArray);
 
     function buildTree(cleanArray) {
         if (cleanArray.length === 0) {
@@ -100,12 +101,29 @@ function Tree(array) {
         return rootNode;
     }
 
-    const root = buildTree(cleanArray);
-    return { root } 
+    function find(value) {
+        if(!value) {
+            return;
+        }
+
+        if (value === root.value) {
+            return root;
+        }
+        else if (value < root.value) {
+            return root.left.find(value);
+        }
+        else if (value > root.value) {
+            return root.right.find(value);
+        }
+    }
+
+    
+
+    
+    return { root, find } 
 }
 
-const a = Tree([4,1,2,3,4,4,1,2,5])
-
-console.log(a.root.value);
+const a = Tree([4,1,2,3,4,4,1,2,5, 8, 6])
 
 prettyPrint(a.root);
+prettyPrint(a.find(4));
