@@ -102,28 +102,81 @@ function Tree(array) {
     }
 
     function find(value) {
-        if(!value) {
+        if (!value) {
             return;
         }
 
-        if (value === root.value) {
-            return root;
+        let searchNode = root;
+
+        do {
+            if (value === searchNode.value) {
+                return searchNode;
+            }
+            else if (value < searchNode.value) {
+                if (searchNode.left) {
+                    searchNode = searchNode.left;
+                }
+                else {
+                    return false;
+                }
+            }
+            else if (value > searchNode.value) {
+                if (searchNode.right) {
+                    searchNode = searchNode.right;
+                }
+                else {
+                    return false;
+                }
+            }
         }
-        else if (value < root.value) {
-            return root.left.find(value);
+        while (searchNode);
+        
+}
+
+    function insert(value) {
+        if (!value) {
+            return false;
         }
-        else if (value > root.value) {
-            return root.right.find(value);
+
+        const newNode = node(value);
+        let searchNode = root;
+
+        do {
+            if (value === searchNode.value) {
+                return false;
+            }
+            else if (value < searchNode.value) {
+                if (!searchNode.left) {
+                    searchNode.left = newNode;
+                    break;
+                } 
+                else {
+                    searchNode = searchNode.left;
+                }
+            }
+            else if (value > searchNode.value) {
+                if (!searchNode.right) {
+                    searchNode.right = newNode;
+                    break;
+                }
+                else {
+                    searchNode = searchNode.right;
+                }
+            }
         }
+        while (searchNode)
+        
+        return true;
     }
 
     
-
-    
-    return { root, find } 
+    return { root, find, insert } 
 }
 
-const a = Tree([4,1,2,3,4,4,1,2,5, 8, 6])
+const a = Tree([4,1,2,3,4,4,1,2,5])
 
 prettyPrint(a.root);
 prettyPrint(a.find(4));
+
+a.insert(7);
+prettyPrint(a.root);
