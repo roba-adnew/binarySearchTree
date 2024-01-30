@@ -1,5 +1,9 @@
-function Node(value, left, right) {
-    return (value, left, right)
+function node(value, left = null, right = null) {
+    if (!value) {
+        throw new Error("No value provided");
+    }
+
+    return { value, left, right }
 }
 
 function mergeSort(unsortedArray) {
@@ -14,7 +18,6 @@ function mergeSort(unsortedArray) {
     const leftHalfSorted = mergeSort(leftHalf);
     const rightHalfSorted = mergeSort(rightHalf);
 
-    const length = Math.max(leftHalfSorted.length, rightHalfSorted.length)
     const sortedArray = []
 
     do {
@@ -43,34 +46,66 @@ function mergeSort(unsortedArray) {
     return sortedArray;
 }
 
-function removeDuplicates(undupedArray) {
-    for (let i = 0; i < undupedArray.length - 1; i++) {
-        for (let j = i + 1; j < undupedArray.length; j++) {
-            if (undupedArray[i] === undupedArray[j]) {
-                undupedArray.splice(j,1);
+function removeDuplicates(dedupedArray) {
+    for (let i = 0; i < dedupedArray.length - 1; i++) {
+        for (let j = i + 1; j < dedupedArray.length; j++) {
+            if (dedupedArray[i] === dedupedArray[j]) {
+                dedupedArray.splice(j,1);
                 j--;
             }
         }
     }
 
-    return undupedArray;
+    return dedupedArray;
 }
-function Tree(array) {
 
-
-    function buildTree(array) {
-        const sortedArray = mergeSort(array);
-        const undupedSortedArray = removeDuplicates(sortedArray);
-
-        if (array.length === 1) {
-            return;
-        }
-
-        const rootNode = 0;
+const prettyPrint = (node, prefix = "", isLeft = true) => {
+    if (node === null) {
+      return;
     }
 
-    const root = buildTree(array);
+    if (node.right !== null) {
+      prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+    }
+
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
+
+    if (node.left !== null) {
+      prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+    }
+  };
+
+function Tree(array) {
+
+    const sortedArray = mergeSort(array);
+    const cleanArray = removeDuplicates(sortedArray);
+
+    function buildTree(cleanArray) {
+        if (cleanArray.length === 0) {
+            return null;
+        }
+
+        if (cleanArray.length === 1) {
+            return node(cleanArray[0]);
+        }
+        
+        const midPoint = Math.ceil(cleanArray.length / 2) - 1;
+        const leftHalf = cleanArray.slice(0, midPoint);
+        const rightHalf = cleanArray.slice(midPoint + 1, cleanArray.length);
+
+        const rootNode = node(cleanArray[midPoint]);
+        rootNode.left = buildTree(leftHalf);
+        rootNode.right = buildTree(rightHalf);
+
+        return rootNode;
+    }
+
+    const root = buildTree(cleanArray);
     return { root } 
 }
 
-console.log(removeDuplicates([1,2,3,4,4,1,2]))
+const a = Tree([4,1,2,3,4,4,1,2,5])
+
+console.log(a.root.value);
+
+prettyPrint(a.root);
