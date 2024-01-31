@@ -169,14 +169,94 @@ function Tree(array) {
         return true;
     }
 
+    function findNextSmallest(value) {
+        if (!value || value === root.value ) {
+            return;
+        }
+
+        const node = find(value);
+        let searchNode;
+        if (node.right) {
+            searchNode = node.right;
+            while (searchNode.left) {
+                searchNode = searchNode.left;
+            }
+            return searchNode;
+        }
+        else if (node.left) {
+            searchNode = node.left;
+            while (searchNode.right) {
+                searchNode = searchNode.right;
+            }
+            return searchNode;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function findParent(value) {
+        if (!value || value === root.value ) {
+            return;
+        }
+
+        let parentNode = root;
+
+        do {
+            if (value < parentNode.value) {
+                if (value === parentNode.left.value) {
+                    return parentNode;
+                }
+                else {
+                    parentNode = parentNode.left;
+                    continue;
+                }
+                
+            }
+            
+            if (value > parentNode.value) {
+                if (value === parentNode.right.value) {
+                    return parentNode;
+                }
+                else {
+                    parentNode = parentNode.right;
+                    continue;
+                }
+            }   
+        }
+        while (parentNode);
+
+        return false;
+    } 
+
+    function deleteNode(value) {
+        if (!value || !find(value)) {
+            return;
+        }
+
+        const targetNode = find(value);
+        const targetParentNode = findParent(value);
+        const directionToTarget = 
+            targetParentNode.left.value === targetNode.value ? 'left' : 'right';
+        
+        if (!targetNode.left && !targetNode.right) {
+            targetParentNode[directionToTarget] = null;
+            return;
+        }
+        
+        const replacementNode = findNextSmallest(value);
+        deleteNode(replacementNode.value);
+        targetNode.value = replacementNode.value;
+        
+        return;
+    }
     
-    return { root, find, insert } 
+    return { root, find, insert, deleteNode } 
 }
 
-const a = Tree([4,1,2,3,4,4,1,2,5])
+const a = Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
 
 prettyPrint(a.root);
-prettyPrint(a.find(4));
 
-a.insert(7);
+a.deleteNode(12);
 prettyPrint(a.root);
