@@ -197,7 +197,7 @@ function Tree(array) {
 
     function findParent(value) {
         if (!value || value === root.value ) {
-            return;
+            return false;
         }
 
         let parentNode = root;
@@ -310,13 +310,13 @@ function Tree(array) {
         return postOrdered;
     }
 
-    function height(node = root, runningHeight = 0) {
+    function height(node = root) {
         if (!node.left && !node.right) {
             return 0;
         }
 
-        let leftHeight = runningHeight;
-        let rightHeight = runningHeight;
+        let leftHeight = 0;
+        let rightHeight = 0;
 
         if (node.left) {
             leftHeight++
@@ -331,8 +331,29 @@ function Tree(array) {
 
         return Math.max(leftHeight, rightHeight)
     }
+
+    function depth(nodeValue = root.value) {
+        
+        const node = find(nodeValue);
+        if (!node) {
+            return;
+        }
+        
+        if (node === root) {
+            return 0;
+        }
+
+        let currentDepth = 0;
+        const parentNode = findParent(node.value);
+        if (parentNode) {
+            currentDepth++;
+            currentDepth += depth(parentNode.value)
+        }
+
+        return currentDepth;
+    }
       
-    return { root, find, insert, deleteNode, levelOrder, preOrder, inOrder, postOrder, height } 
+    return { root, find, insert, deleteNode, levelOrder, preOrder, inOrder, postOrder, height, depth } 
 }
 
 const a = Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
@@ -343,4 +364,4 @@ const a = Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
 
 const b = Tree([1,2,3,4]);
 prettyPrint(b.root)
-console.log(a.height());
+console.log(a.depth(4));
