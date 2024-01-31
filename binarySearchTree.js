@@ -79,7 +79,7 @@ function Tree(array) {
 
     const sortedArray = mergeSort(array);
     const cleanArray = removeDuplicates(sortedArray);
-    const root = buildTree(cleanArray);
+    let root =  buildTree(cleanArray);
 
     function buildTree(cleanArray) {
         if (cleanArray.length === 0) {
@@ -333,7 +333,6 @@ function Tree(array) {
     }
 
     function depth(nodeValue = root.value) {
-        
         const node = find(nodeValue);
         if (!node) {
             return;
@@ -352,16 +351,28 @@ function Tree(array) {
 
         return currentDepth;
     }
+
+    function isBalanced() {
+        const heightDiff = Math.abs(height(root.left) - height(root.right));
+        if (heightDiff > 1) {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
+    function rebalance() {
+        if (isBalanced()) {
+            return
+        }
+
+        const treeElements = preOrder();
+        const sortedTreeElements = mergeSort(treeElements);
+        const cleanTreeElements = removeDuplicates(sortedTreeElements);
+        root = buildTree(cleanTreeElements);
+        return root
+    }
       
-    return { root, find, insert, deleteNode, levelOrder, preOrder, inOrder, postOrder, height, depth } 
+    return { get root() { return root }, find, insert, deleteNode, levelOrder, preOrder, inOrder, postOrder, height, depth, isBalanced, rebalance } 
 }
-
-const a = Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
-// console.log(a.levelOrder());
-// console.log(a.preOrder());
-// console.log(a.inOrder());
-// console.log(a.postOrder());
-
-const b = Tree([1,2,3,4]);
-prettyPrint(b.root)
-console.log(a.depth(4));
