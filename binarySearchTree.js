@@ -250,13 +250,39 @@ function Tree(array) {
         
         return;
     }
+
+    function levelOrder() {
+        if (!root) {
+            return false;
+        }
+
+        const levelOrdered = [];
+        const toCheck = [root];
+
+        do {
+            levelOrdered.push(toCheck[0].value);
+            if (toCheck[0].left) {
+                toCheck.push(toCheck[0].left)
+            }
+            if (toCheck[0].right) {
+                toCheck.push(toCheck[0].right)
+            }
+            toCheck.shift();
+        }
+        while (toCheck[0]);
+
+        return levelOrdered;
+    } 
+
     
-    return { root, find, insert, deleteNode } 
+    return { root, find, insert, deleteNode, levelOrder } 
 }
 
-const a = Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
+const a = Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+console.log(a.levelOrder());
 
-prettyPrint(a.root);
 
-a.deleteNode(12);
-prettyPrint(a.root);
+// prettyPrint(a.root);
+
+// a.deleteNode(12);
+// prettyPrint(a.root);
