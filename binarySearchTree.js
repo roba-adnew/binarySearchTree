@@ -274,15 +274,48 @@ function Tree(array) {
         return levelOrdered;
     } 
 
+    function preOrder(node = root, preOrdered = []) {
+        if (!node) {
+            return preOrdered;
+        }
+
+        preOrdered.push(node.value);
+        preOrder(node.left, preOrdered);
+        preOrder(node.right, preOrdered);
+
+        return preOrdered;
+    }
+
+    function inOrder(node = root, inOrdered = []) {
+        if (!node) {
+            return inOrdered;
+        }
+
+        inOrder(node.left, inOrdered);
+        inOrdered.push(node.value);
+        inOrder(node.right, inOrdered);
+
+        return inOrdered;
+    }
+
+    function postOrder(node = root, postOrdered = []) {
+        if (!node) {
+            return postOrdered;
+        }
+
+        postOrder(node.left, postOrdered);
+        postOrder(node.right, postOrdered);
+        postOrdered.push(node.value);
+
+        return postOrdered;
+    }
+
     
-    return { root, find, insert, deleteNode, levelOrder } 
+    return { root, find, insert, deleteNode, levelOrder, preOrder, inOrder, postOrder } 
 }
 
 const a = Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
 console.log(a.levelOrder());
-
-
-// prettyPrint(a.root);
-
-// a.deleteNode(12);
-// prettyPrint(a.root);
+console.log(a.preOrder());
+console.log(a.inOrder());
+console.log(a.postOrder());
