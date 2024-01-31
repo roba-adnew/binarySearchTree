@@ -376,3 +376,43 @@ function Tree(array) {
       
     return { get root() { return root }, find, insert, deleteNode, levelOrder, preOrder, inOrder, postOrder, height, depth, isBalanced, rebalance } 
 }
+
+function randomArraySub100(size) {
+    const array = [];
+    for (let i = 0; i < size; i++) {
+        array.push(Math.floor(Math.random() * 100))
+    }
+    return array
+}
+
+function randomArrayOver100(size) {
+    const array = [];
+    for (let i = 0; i < size; i++) {
+        array.push(1000 - Math.floor(Math.random() * 100))
+    }
+    return array
+}
+
+const test = Tree(randomArraySub100(40));
+prettyPrint(test.root)
+console.log(test.isBalanced());
+
+console.log(test.levelOrder());
+console.log(test.preOrder());
+console.log(test.inOrder());
+console.log(test.postOrder());
+
+const extraNumbers = randomArrayOver100(20)
+extraNumbers.forEach(test.insert);
+prettyPrint(test.root)
+console.log(test.isBalanced());
+
+test.rebalance();
+prettyPrint(test.root);
+console.log(test.isBalanced());
+
+
+console.log(test.levelOrder());
+console.log(test.preOrder());
+console.log(test.inOrder());
+console.log(test.postOrder());
