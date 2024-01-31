@@ -310,12 +310,37 @@ function Tree(array) {
         return postOrdered;
     }
 
-    
-    return { root, find, insert, deleteNode, levelOrder, preOrder, inOrder, postOrder } 
+    function height(node = root, runningHeight = 0) {
+        if (!node.left && !node.right) {
+            return 0;
+        }
+
+        let leftHeight = runningHeight;
+        let rightHeight = runningHeight;
+
+        if (node.left) {
+            leftHeight++
+            leftHeight += height(node.left)
+        }
+
+        
+        if (node.right) {
+            rightHeight++;
+            rightHeight += height(node.right)
+        }
+
+        return Math.max(leftHeight, rightHeight)
+    }
+      
+    return { root, find, insert, deleteNode, levelOrder, preOrder, inOrder, postOrder, height } 
 }
 
 const a = Tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
-console.log(a.levelOrder());
-console.log(a.preOrder());
-console.log(a.inOrder());
-console.log(a.postOrder());
+// console.log(a.levelOrder());
+// console.log(a.preOrder());
+// console.log(a.inOrder());
+// console.log(a.postOrder());
+
+const b = Tree([1,2,3,4]);
+prettyPrint(b.root)
+console.log(a.height());
